@@ -1326,7 +1326,12 @@ public class FileUtils extends CordovaPlugin {
                                 mimeType = resource.mimeType;
                             }
 
-                            return new WebResourceResponse(mimeType, null, io);
+                            WebResourceResponse response = new WebResourceResponse(mimeType, null, io);
+                            if (response.getResponseHeaders() == null) {
+                                response.setResponseHeaders(new HashMap<String, String>());
+                            }
+                            response.getResponseHeaders().put("Access-Control-Allow-Origin", "*");
+                            return response;
                         } catch (FileNotFoundException e) {
                             Log.e(LOG_TAG, e.getMessage());
                         } catch (IOException e) {
